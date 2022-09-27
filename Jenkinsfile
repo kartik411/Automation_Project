@@ -11,16 +11,15 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh 'cd test-nodeapp-1-task && sudo docker build . -t public.ecr.aws/s8b3a9g8/node-app:helloworld'
-        sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password $(aws ecr-public get-login-password --region us-east-1) public.ecr.aws/s8b3a9g8'
-        sh 'sudo docker push public.ecr.aws/s8b3a9g8/node-app:helloworld'
+        sh 'sudo docker build . -t 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
+        sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password $(aws ecr get-login-password --region us-east-1)647560355561.dkr.ecr.us-east-1.amazonaws.com'
+        sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
       }  
     }
    
     stage('Deploy to app host') {
       steps {
-        sh 'sudo docker stop HelloWorld && sudo docker rm HelloWorld'
-        sh 'sudo docker run -itd -p 8080:8080 --name HelloWorld public.ecr.aws/s8b3a9g8/node-app:helloworld'
+        sh 'sudo docker run -itd -p 8080:8080 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
       }
     }
   }
